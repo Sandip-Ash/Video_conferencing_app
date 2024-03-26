@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:soul_conference/constants/colors.dart';
 import 'package:soul_conference/constants/variables.dart';
 import 'call_page.dart';
@@ -12,11 +13,21 @@ class Joining_Page extends StatefulWidget {
 
 class _Joining_PageState extends State<Joining_Page> {
 
-  final callingID = TextEditingController();
+  late TextEditingController callingID = TextEditingController();
   final username = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+
+    void Paste()async{
+      final data = await Clipboard.getData('text/plain');
+      if(data != null){
+        setState(() {
+          callingID.text = data.text ?? '';
+        });
+      }
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -28,8 +39,18 @@ class _Joining_PageState extends State<Joining_Page> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 100),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Image.asset('assets/images/join_meeting.png', width: 150,),
+
+            const SizedBox(
+              height: 20,
+            ),
+
+            Text('Enter The Joining Code', style: TextStyle(fontSize: 20),),
+            const SizedBox(
+              height: 20,
+            ),
+
             TextFormField(
               controller: username,
               style: TextStyle(fontSize: 20, color: Colors.black),
@@ -43,7 +64,7 @@ class _Joining_PageState extends State<Joining_Page> {
               ),
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
 
@@ -60,7 +81,7 @@ class _Joining_PageState extends State<Joining_Page> {
               ),
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
 
