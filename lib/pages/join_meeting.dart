@@ -37,9 +37,13 @@ class _Joining_PageState extends State<Joining_Page> {
       ),
 
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 100),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
+            const SizedBox(
+              height: 40,
+            ),
+
             Image.asset('assets/images/join_meeting.png', width: 150,),
 
             const SizedBox(
@@ -70,11 +74,17 @@ class _Joining_PageState extends State<Joining_Page> {
 
             TextFormField(
               controller: callingID,
-              style: TextStyle(fontSize: 20, color: Colors.black),
+              style: const TextStyle(fontSize: 20, color: Colors.black),
               decoration: InputDecoration(
                 hintText: 'Enter Meeting ID',
-                hintStyle: TextStyle(fontSize: 20),
-                contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                hintStyle: const TextStyle(fontSize: 20),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.paste),
+                  onPressed: (){
+                    Paste();
+                  },
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50),
                 ),
@@ -88,15 +98,13 @@ class _Joining_PageState extends State<Joining_Page> {
             ElevatedButton(
               onPressed: (){
                 checkCallingID();
-                userName = username.text.toString();
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CallPage(callID: callingID.text.toString())));
               },
               child: Text('Join', style: TextStyle(color: Colors.white, fontSize: 20),),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)
                 ),
-                backgroundColor: purple
+                backgroundColor: Colors.deepPurple
               ),
             )
           ],
@@ -106,18 +114,34 @@ class _Joining_PageState extends State<Joining_Page> {
   }
 
   void checkCallingID() {
-    if(callingID.text.toString().isEmpty){
-      AlertDialog(
-        title: Text('Invalid Calling ID'),
-        content: Text('Calling ID field should not be empty...'),
-        actions: [
-          ElevatedButton(
-              onPressed: (){
-                Navigator.pop(context);
-              },
-              child: Text('OK'))
-        ],
+    // print('Username: ${username.text.toString()}');
+    // print('CallingID: ${callingID.text.toString()}');
+
+    if(username.text.toString() != ''){       // Check whether the Username field is empty or not
+      userName = username.text.toString();
+    }
+
+    print('Username: $userName');
+
+    if(isValidFormat(callingID.text.toString()) == false){      // Check whether the Calling ID is valid or not
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Invalid Calling ID'),
+            content: Text('Please enter valid Calling ID'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          )
       );
+    }
+    else{
+      Navigator.push(context, MaterialPageRoute(builder: (context) => CallPage(callID: callingID.text.toString())));
     }
   }
 }

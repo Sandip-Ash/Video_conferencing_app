@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:soul_conference/constants/variables.dart';
 
 import '../constants/colors.dart';
+import 'join_meeting.dart';
 
 class New_Meeting extends StatefulWidget {
   const New_Meeting({Key? key}) : super(key: key);
@@ -14,6 +16,43 @@ class New_Meeting extends StatefulWidget {
 class _New_MeetingState extends State<New_Meeting> {
   @override
   Widget build(BuildContext context) {
+    void updateTextVar() {    // Update the Meeting ID
+      setState(() {
+        meetingCode = generateRandomString(); // Update the state variable
+      });
+    }
+
+    String sharedMessage = 'Please use the following Meeting ID to join our video conference on Soul Conference \n\nMeeting ID: $meetingCode';
+
+    Share_Code(){             // Share the meeting ID via other Apps
+      Share.share(sharedMessage);
+    }
+
+    void checkCallingID() {
+      print('Meeting Code: $meetingCode');
+
+      if(meetingCode == ''){      // Check whether the Calling ID is Empty or not
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Invalid Calling ID'),
+              content: Text('Please generate a Calling ID'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            )
+        );
+      }
+      else{
+        Share_Code();
+      }
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
 
@@ -50,16 +89,23 @@ class _New_MeetingState extends State<New_Meeting> {
               ),
 
               Card(
-                color: Colors.grey[300],
+                color: Colors.grey[200],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: ListTile(
-                  leading: Icon(Icons.link),
-                  title: SelectableText(
-                    meetingCode,
-                    style: TextStyle(fontWeight: FontWeight.w300),
+                  leading: IconButton(
+                    onPressed: updateTextVar,
+                    icon: Icon(Icons.link)
                   ),
+
+                  title: Center(
+                    child: SelectableText(
+                      meetingCode,
+                      style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20),
+                    ),
+                  ),
+
                   trailing: IconButton(
                     icon: Icon(Icons.copy),
                     onPressed: (){
@@ -74,7 +120,9 @@ class _New_MeetingState extends State<New_Meeting> {
               ),
 
               ElevatedButton.icon(
-                onPressed: (){},
+                onPressed: (){
+                  checkCallingID();
+                },
                 icon: const Icon(Icons.share, color: Colors.white, size: 25,),
                 label: const Text('Share Invite', style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),),
                 style: ElevatedButton.styleFrom(
@@ -91,7 +139,9 @@ class _New_MeetingState extends State<New_Meeting> {
               ),
 
               ElevatedButton.icon(
-                onPressed: (){},
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Joining_Page(),));
+                },
                 icon: const Icon(Icons.video_call_outlined, color: Colors.white, size: 25,),
                 label: const Text('Join Meeting', style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),),
                 style: ElevatedButton.styleFrom(
