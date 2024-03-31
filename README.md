@@ -18,6 +18,4 @@ This **Video Conferencing App** is a user-friendly application built using *Flut
 
 Scan the QR code below to download the **Soul Conferencing App**:
 
-![image1](https://github.com/Sandip-Ash/Video_conferencing_app/assets/79464800/c72e2744-996f-44a2-8f3c-ff5ccd932fe8)
-
-
+<img src="https://github.com/Sandip-Ash/Video_conferencing_app/assets/79464800/c72e2744-996f-44a2-8f3c-ff5ccd932fe8" alt="QR Code" width="200" height="200">
